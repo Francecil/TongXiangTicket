@@ -221,7 +221,8 @@
 					"page/tab-setting.html",
 					"page/tab-book_ticket.html",
 					"page/tab-my_tickets.html",
-					"page/tab-my_orders.html"
+					"page/tab-my_orders.html",
+					"login.html"
 				],
 				"priority": 0
 			},
@@ -267,6 +268,17 @@
 					"fonts/mui.ttf"
 				],
 				"refer": [],
+				"priority": 0
+			},
+			"login.html": {
+				"resources": [
+					"js/mui.min.js",
+					"css/mui.min.css",
+					"fonts/mui.ttf"
+				],
+				"refer": [
+					"index.html"
+				],
 				"priority": 0
 			}
 		},
