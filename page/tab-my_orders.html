@@ -13,31 +13,197 @@
 			html,body {
 				background-color: #efeff4;
 			}
+			
 			.title{
 				margin: 20px 15px 10px;
 				color: #6d6d72;
 				font-size: 15px;
 			}
+			.mui-table h4,.mui-table h5,.mui-table .mui-h5,.mui-table .mui-h6,.mui-table p{
+		        margin-top: 0;
+		    }
+		    .mui-table h4{
+		        line-height: 31px;
+		        font-weight: 500;
+		    }
+		
+		    .mui-table .oa-icon{
+		        position: absolute;
+		        right:0;
+		        bottom: 0;
+		    }
+		    .mui-table .oa-icon-star-filled{
+		        color:#f14e41;
+		    }
 		</style>
 	</head>
 
 	<body>
+		<style>
+		.mui-control-content {
+				background-color: white;
+				min-height: 450px;
+			}
+			.mui-control-content .mui-loading {
+				margin-top: 50px;
+			}
+		</style>
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 			<h1 class="mui-title">我的订单</h1>
 		</header>
 		<div class="mui-content">
-			<div class="title">
-				我的订单
+			<div id="slider" class="mui-slider">
+				<div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control ">
+					<a class="mui-control-item" href="#item1mobile">
+				已完成订单
+			</a>
+					<a class="mui-control-item" href="#item2mobile">
+				未完成订单
+			</a>
+					
+				</div>
+				<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-4"></div>
+				<div class="mui-slider-group">
+					<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+						<div id="scroll1" class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed">
+									<li class="mui-table-view-cell">
+									<div class="mui-table">
+		                <div class="mui-table-cell mui-col-xs-10">
+		                    <h4 class=" mui-h6 mui-ellipsis">2015-10-1 19:05开 G6025 福州南-晋江</h4>
+		                    <h5>旅客信息:郑家兴  二代身份证</h5>
+		                    <h5>票款金额:成人票 100.2元</h5>
+		                    <h5>席位信息:08车厢 06D号 二等座</h5>
+		                </div>
+		                <div class="mui-table-cell mui-col-xs-2 mui-text-right">
+		                    <span class="mui-h5" style="color:blue">已出票</span>
+		                </div>
+		            </div>
+		        </li>
+		        <li class="mui-table-view-cell">
+		            <div class="mui-table">
+		                <div class="mui-table-cell mui-col-xs-10">
+		                    <h4 class=" mui-h6 mui-ellipsis">2015-10-1 19:05开 G6025 福州南-晋江</h4>
+		                    <h5>旅客信息:郑家兴  二代身份证</h5>
+		                    <h5>票款金额:成人票 100.2元</h5>
+		                    <h5>席位信息:08车厢 06D号 二等座</h5>
+		                </div>
+		                <div class="mui-table-cell mui-col-xs-2 mui-text-right">
+		                    <span class="mui-h5" style="color:blue">已退款</span>
+		                </div>
+		            </div>
+		        </li>
+		        <li class="mui-table-view-cell">
+		            <div class="mui-table">
+		                <div class="mui-table-cell mui-col-xs-10">
+		                    <h4 class=" mui-h6 mui-ellipsis">2015-10-1 19:05开 G6025 福州南-晋江</h4>
+		                    <h5>旅客信息:郑家兴  二代身份证</h5>
+		                    <h5>票款金额:成人票 100.2元</h5>
+		                    <h5>席位信息:08车厢 06D号 二等座</h5>
+		                </div>
+		                <div class="mui-table-cell mui-col-xs-2 mui-text-right">
+		                    <span class="mui-h5" style="color:blue">已改签</span>
+		                </div>
+		            </div>
+		        </li>
+		        <li class="mui-table-view-cell">
+		            <div class="mui-table">
+		                <div class="mui-table-cell mui-col-xs-10">
+		                    <h4 class=" mui-h6 mui-ellipsis">2015-10-1 19:05开 G6025 福州南-晋江</h4>
+		                    <h5>旅客信息:郑家兴  二代身份证</h5>
+		                    <h5>票款金额:成人票 100.2元</h5>
+		                    <h5>席位信息:08车厢 06D号 二等座</h5>
+		                </div>
+		                <div class="mui-table-cell mui-col-xs-2 mui-text-right">
+		                    <span class="mui-h5" style="color:blue">已出票</span>
+		                </div>
+		            </div>
+		        </li>
+		        <li class="mui-table-view-cell">
+		            <div class="mui-table">
+		                <div class="mui-table-cell mui-col-xs-10">
+		                    <h4 class=" mui-h6 mui-ellipsis">2015-10-1 19:05开 G6025 福州南-晋江</h4>
+		                    <h5>旅客信息:郑家兴  二代身份证</h5>
+		                    <h5>票款金额:成人票 100.2元</h5>
+		                    <h5>席位信息:08车厢 06D号 二等座</h5>
+		                </div>
+		                <div class="mui-table-cell mui-col-xs-2 mui-text-right">
+		                    <span class="mui-h5" style="color:blue">已出票</span>
+		                </div>
+		            </div>
+		        </li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div id="item2mobile" class="mui-slider-item mui-control-content ">
+						<div id="scroll2" class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<div class="mui-loading">
+									<div class="mui-spinner">
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+					
+				</div>
 			</div>
+
+			
+
 		</div>
-		</style>
-	</body>
+	
+	
 	<script src="../js/mui.min.js"></script>
+	<script>
+		window.onload = function() {
+			//从服务器获取数据
+			//				....
+			//业务数据获取完毕，并已插入当前页面DOM；
+			//注意：若为ajax请求，则需将如下代码放在处理完ajax响应数据之后；
+			mui.plusReady(function() {
+				//关闭等待框
+				plus.nativeUI.closeWaiting();
+				//显示当前页面
+				mui.currentWebview.show();
+			});
+		}
+	</script>
 	<script>
 		mui.init({
 			swipeBack:true //启用右滑关闭功能
 		});
+		(function($) {
+				$('.mui-scroll-wrapper').scroll({
+					indicators: true //是否显示滚动条
+				});
+		var html2 = '<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed"><li class="mui-table-view-cell"><div class="mui-table"><div class="mui-table-cell mui-col-xs-10"><h4 class=" mui-h6 mui-ellipsis">2015-1-12 9:05开 G6125 福州南-晋江</h4><h5>旅客信息:郑家兴  二代身份证</h5><h5>票款金额:成人票 100.2元</h5><h5>席位信息:08车厢 16D号 二等座</h5></div><div class="mui-table-cell mui-col-xs-2 mui-text-right"><span class="mui-h5" style="color:red">待付款</span></div></div></li><li class="mui-table-view-cell"><div class="mui-table"><div class="mui-table-cell mui-col-xs-10"><h4 class=" mui-h6 mui-ellipsis">2015-2-1 19:05开 G6025 北京-晋江</h4><h5>旅客信息:郑家兴  二代身份证</h5><h5>票款金额:成人票 500.2元</h5><h5>席位信息:09车厢 16A号 一等座</h5></div><div class="mui-table-cell mui-col-xs-2 mui-text-right"><span class="mui-h5" style="color:red">待付款</span></div></div></li></ul>';
+		var item2 = document.getElementById('item2mobile');
+				
+				document.getElementById('slider').addEventListener('slide', function(e) {
+					if (e.detail.slideNumber === 1) {
+						if (item2.querySelector('.mui-loading')) {
+							setTimeout(function() {
+								item2.querySelector('.mui-scroll').innerHTML = html2;
+							}, 1000);
+						}
+					} 
+				});
+				var sliderSegmentedControl = document.getElementById('sliderSegmentedControl');
+				$('.mui-input-group').on('change', 'input', function() {
+					if (this.checked) {
+						sliderSegmentedControl.className = 'mui-slider-indicator mui-segmented-control mui-segmented-control-inverted mui-segmented-control-' + this.value;
+						//force repaint
+						sliderProgressBar.setAttribute('style', sliderProgressBar.getAttribute('style'));
+					}
+				});
+			})(mui);
+		
+		
 		document.getElementById("about").addEventListener('tap',function () {
 			//获得主页面的webview
 			var main = plus.webview.currentWebview().parent();

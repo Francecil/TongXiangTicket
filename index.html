@@ -61,15 +61,15 @@
 		<div id="offCanvasWrapper" class="mui-off-canvas-wrap mui-draggable mui-content">
 			<!--侧滑菜单部分-->
 			<aside id="offCanvasSide" class="mui-off-canvas-left">
-				<div id="offCanvasSideScroll" class="mui-scroll-wrapper" >
-					<div class="mui-scroll" >
+				<div id="offCanvasSideScroll" class="mui-scroll-wrapper">
+					<div class="mui-scroll">
 						<!--<div class="title">郑家兴</div>
 						<div class="content">
 							数计学院
 						</div>-->
-						<div class="title">未登录</div>
-						<div class="content">
-									<button id="login-btn-pre" type="button" >登录</button>
+						<div id="name-or-unlogin" class="title">未登录</div>
+						<div id="dept-or-btn" class="content">
+							<button id="login-btn-pre" type="button">登录</button>
 						</div>
 						<ul class="mui-table-view mui-table-view-chevron mui-table-view-inverted">
 							<li class="mui-table-view-cell">
@@ -96,9 +96,9 @@
 							</li>
 						</ul>
 						<ul>
-								<p style="width:70%;margin-top:60px">
-									<button id="close-btn" type="button" class="mui-btn mui-btn-danger mui-btn-block" style="padding: 5px 20px;">注销</button>
-								</p>
+							<p id="layout" style="width:70%;margin-top:60px">
+								<button id="layout-btn" type="button" class="mui-btn mui-btn-danger mui-btn-block" style="padding: 5px 20px;">注销</button>
+							</p>
 						</ul>
 					</div>
 				</div>
@@ -178,98 +178,119 @@
 			</div>
 		</div>
 		<script src="js/mui.min.js"></script>
+		<script src="js/app.js"></script>
 		<script>
-			mui.init();
-			//侧滑容器父节点
-			var offCanvasWrapper = mui('#offCanvasWrapper');
-			//主界面容器
-			var offCanvasInner = offCanvasWrapper[0].querySelector('.mui-inner-wrap');
-			//菜单容器
-			var offCanvasSide = document.getElementById("offCanvasSide");
-			//移动效果是否为整体移动
-			var moveTogether = true;
-			//侧滑容器的class列表，增加.mui-slide-in即可实现菜单移动、主界面不动的效果；
-			var classList = offCanvasWrapper[0].classList;
-			//变换侧滑动画移动效果；
-			if (moveTogether) {
-				//仅主内容滑动时，侧滑菜单在off-canvas-wrap内，和主界面并列
-				offCanvasWrapper[0].insertBefore(offCanvasSide, offCanvasWrapper[0].firstElementChild);
-			}
-			classList.add('mui-scalable'); //增加仿qq侧滑
-			offCanvasWrapper.offCanvas().refresh();
-			//主界面和侧滑菜单界面均支持区域滚动；
-			mui('#offCanvasSideScroll').scroll();
-			mui('#offCanvasContentScroll').scroll();
-			//实现ios平台原生侧滑关闭页面；
-			if (mui.os.plus && mui.os.ios) {
-				mui.plusReady(function() { //5+ iOS暂时无法屏蔽popGesture时传递touch事件，故该demo直接屏蔽popGesture功能
-					plus.webview.currentWebview().setStyle({
-						'popGesture': 'none'
-					});
-				});
-			}
-			//cope from pengYE
-			//点击左上角侧滑图标，打开侧滑菜单；
-			document.querySelector('.mui-icon-bars').addEventListener('tap', function(e) {
-				offCanvasWrapper.offCanvas('show');
-			});
-			//重写mui.menu方法，Android版本menu按键按下可自动打开、关闭侧滑菜单；
-			mui.menu = function() {
-					offCanvasWrapper.offCanvas('show');
-				}
-				//首页返回键处理
-				//处理逻辑：1秒内，连续两次按返回键，则退出应用；
-			var first = null;
-			mui.back = function() {
-				//isShown函数判断侧滑菜单是否显示
-				//offCanvas('show')方法:打开则关闭 关闭则打开
-				if (offCanvasWrapper.offCanvas().isShown()) {
-					offCanvasWrapper.offCanvas('show');
-				} else {
-					//首次按键，提示‘再按一次退出应用’
-					if (!first) {
-						first = new Date().getTime();
-						mui.toast('再按一次退出应用');
-						setTimeout(function() {
-							first = null;
-						}, 1000);
-					} else {
-						if (new Date().getTime() - first < 1000) {
-							plus.runtime.quit();
-						}
+			(function($, doc) {
+				mui.init();
+				$.plusReady(function() {
+					//关闭等待框
+					plus.nativeUI.closeWaiting();
+					//显示当前页面
+					mui.currentWebview.show();
+					//侧滑容器父节点
+					var offCanvasWrapper = mui('#offCanvasWrapper');
+					//主界面容器
+					var offCanvasInner = offCanvasWrapper[0].querySelector('.mui-inner-wrap');
+					//菜单容器
+					var offCanvasSide = document.getElementById("offCanvasSide");
+					//移动效果是否为整体移动
+					var moveTogether = true;
+					//侧滑容器的class列表，增加.mui-slide-in即可实现菜单移动、主界面不动的效果；
+					var classList = offCanvasWrapper[0].classList;
+					//变换侧滑动画移动效果；
+					if (moveTogether) {
+						//仅主内容滑动时，侧滑菜单在off-canvas-wrap内，和主界面并列
+						offCanvasWrapper[0].insertBefore(offCanvasSide, offCanvasWrapper[0].firstElementChild);
 					}
-				}
-			};
-			 //主列表点击事件
-			mui('.mui-scroll').on('tap', 'a', function() {
-				var id = this.getAttribute('href');
-				var href = this.href;
-				//id 的值是href中的值"page/xxx.html" href是sd卡绝对路径
-				//mui.toast(id+",,"+href);
-				//js中 if(x)x<0也可以走只要不是为0
-				//~id.indexOf('.html') 的目的是:
-				/*
-				 * String sb="abc.html";
-				 当sb中不含有.html时
-				 sb.indexOf('.html')=-1 取~为0
-				 * */
-				if (id && ~id.indexOf('.html')) {
-						mui.openWindow({
-							id: id,
-							url: this.href,
-							styles: {
-								popGesture: 'close'
-							},
-							show:{
-      							autoShow:false
-   							},
-							waiting: {
-								autoShow: true
-							}
+					classList.add('mui-scalable'); //增加仿qq侧滑
+					offCanvasWrapper.offCanvas().refresh();
+					//主界面和侧滑菜单界面均支持区域滚动；
+					mui('#offCanvasSideScroll').scroll();
+					mui('#offCanvasContentScroll').scroll();
+					//实现ios平台原生侧滑关闭页面；
+					if (mui.os.plus && mui.os.ios) {
+						mui.plusReady(function() { //5+ iOS暂时无法屏蔽popGesture时传递touch事件，故该demo直接屏蔽popGesture功能
+							plus.webview.currentWebview().setStyle({
+								'popGesture': 'none'
+							});
 						});
-				}
-			});
-			mui(".mui-scroll").on('tap', '#login-btn-pre', function() {
+					}
+					//cope from pengYE
+					//点击左上角侧滑图标，打开侧滑菜单；
+					document.querySelector('.mui-icon-bars').addEventListener('tap', function(e) {
+						offCanvasWrapper.offCanvas('show');
+					});
+					//重写mui.menu方法，Android版本menu按键按下可自动打开、关闭侧滑菜单；
+					mui.menu = function() {
+							offCanvasWrapper.offCanvas('show');
+						}
+						//首页返回键处理
+						//处理逻辑：1秒内，连续两次按返回键，则退出应用；
+					var first = null;
+					mui.back = function() {
+						//isShown函数判断侧滑菜单是否显示
+						//offCanvas('show')方法:打开则关闭 关闭则打开
+						if (offCanvasWrapper.offCanvas().isShown()) {
+							offCanvasWrapper.offCanvas('show');
+						} else {
+							//首次按键，提示‘再按一次退出应用’
+							if (!first) {
+								first = new Date().getTime();
+								mui.toast('再按一次退出应用');
+								setTimeout(function() {
+									first = null;
+								}, 1000);
+							} else {
+								if (new Date().getTime() - first < 1000) {
+									plus.runtime.quit();
+								}
+							}
+						}
+					};
+					//判断登录 未登录的话获得{}
+					var showIsLogin = function() {
+							var state = app.getState();
+							var layout = mui('#layout')[0];
+							if (app.has_login()) {
+								var usernameText = mui('#name-or-unlogin')[0];
+								usernameText.innerHTML = state.name;
+								var deptText = mui('#dept-or-btn')[0];
+								deptText.innerHTML = state.dept;
+								layout.style.display = "block";
+							} else {
+								layout.style.display = "none";
+							}
+						}
+						//主列表点击事件
+					mui('.mui-scroll').on('tap', 'a', function() {
+						var id = this.getAttribute('href');
+						var href = this.href;
+						//id 的值是href中的值"page/xxx.html" href是sd卡绝对路径
+						//mui.toast(id+",,"+href);
+						//js中 if(x)x<0也可以走只要不是为0
+						//~id.indexOf('.html') 的目的是:
+						/*
+						 * String sb="abc.html";
+						 当sb中不含有.html时
+						 sb.indexOf('.html')=-1 取~为0
+						 * */
+						if (id && ~id.indexOf('.html')) {
+							mui.openWindow({
+								id: id,
+								url: this.href,
+								styles: {
+									popGesture: 'close'
+								},
+								show: {
+									autoShow: false
+								},
+								waiting: {
+									autoShow: true
+								}
+							});
+						}
+					});
+					mui(".mui-scroll").on('tap', '#login-btn-pre', function() {
 						mui.openWindow({
 							id: "login",
 							url: "login.html",
@@ -280,14 +301,22 @@
 								autoShow: true
 							}
 						});
-			});
-		</script>
-		//图片轮播
-		<script>
-			var slider = mui("#slider");
-			slider.slider({
-				interval: 3000
-			});
+					});
+					//注销事件
+					mui(".mui-scroll").on('tap', '#layout-btn', function() {
+						plus.nativeUI.showWaiting("注销中...");
+						app.setState({});
+						showIsLogin();
+						plus.nativeUI.closeWaiting();
+					});
+					//图片轮播
+					var slider = mui("#slider");
+					slider.slider({
+						interval: 3000
+					});
+					showIsLogin();
+				});
+			}(mui, document));
 		</script>
 	</body>
 

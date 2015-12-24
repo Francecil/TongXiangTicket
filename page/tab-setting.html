@@ -59,6 +59,20 @@
 	</body>
 	<script src="../js/mui.min.js"></script>
 	<script>
+		window.onload = function() {
+			//从服务器获取数据
+			//				....
+			//业务数据获取完毕，并已插入当前页面DOM；
+			//注意：若为ajax请求，则需将如下代码放在处理完ajax响应数据之后；
+			mui.plusReady(function() {
+				//关闭等待框
+				plus.nativeUI.closeWaiting();
+				//显示当前页面
+				mui.currentWebview.show();
+			});
+		}
+	</script>
+	<script>
 		mui.init({
 			swipeBack:true //启用右滑关闭功能
 		});

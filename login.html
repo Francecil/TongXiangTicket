@@ -86,6 +86,7 @@
 
 	<body>
 		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 			<h1 class="mui-title">登录</h1>
 		</header>
 		<div class="mui-content">
@@ -100,9 +101,9 @@
 				</div>
 			</form>
 			<div class="mui-content-padded">
-						<p>
-							帐号及密码为教务处帐号及密码，请放心，登录只是为验证用户，系统不会记录您的信息
-						</p>
+				<p>
+					帐号及密码为教务处帐号及密码，请放心，登录只是为验证用户，系统不会记录您的信息
+				</p>
 			</div>
 			<div class="mui-content-padded">
 				<button id='login' class="mui-btn mui-btn-block mui-btn-primary">登录</button>
@@ -112,6 +113,7 @@
 			</div>
 		</div>
 		<script src="js/mui.min.js"></script>
+		<script src="js/app.js"></script>
 		<script>
 			(function($, doc) {
 				$.init({
@@ -119,15 +121,78 @@
 				});
 				$.plusReady(function() {
 					plus.screen.lockOrientation("portrait-primary");
-					var mainPage = $.preload({
-						"id": 'index',
-						"url": 'index.html'
-					});
+					/**
+					 * 用户登录
+					 * ||{}可防止传来数据为null
+					 * 由于涉及到mui.ajax 故把登录js移到plusReady中
+					 **/
+					var login = function(loginInfo, callback) {
+						callback = callback || $.noop;
+						loginInfo = loginInfo || {};
+						loginInfo.stunum = loginInfo.stunum || '';
+						loginInfo.passwd = loginInfo.passwd || '';
+						if (loginInfo.stunum.length != 9) {
+							return callback('学号为9个字符');
+						}
+						if (loginInfo.passwd.length < 3) {
+							return callback('密码最短为 3 个字符');
+						}
+						//先去本地遍历是否有存在
+						var users = JSON.parse(localStorage.getItem('$users') || '[]');
+						var authed = users.some(function(user) {
+							return loginInfo.stunum == user.stunum && loginInfo.passwd == user.passwd;
+						});
+						if (authed) {
+							console.log("存在 直接login");
+							return app.createState(loginInfo.stunum, callback);
+						} else {
+							console.log("不存在 需要远程验证");
+							//如果没有的话再去服务器查询 有效解决教务处密码更换问题
+							var url = "http://txy.azurewebsites.net/action/login.php";
+							mui.ajax(url, {
+								data: {
+									stunum: loginInfo.stunum,
+									passwd: loginInfo.passwd
+								},
+								dataType: 'json', //服务器返回json格式数据
+								type: 'post', //HTTP请求类型
+								timeout: 10000, //超时时间设置为10秒；
+								success: function(info) {
+									//服务器返回响应，根据响应结果，分析是否登录成功，并把数据存入本地users列表
+									console.log(info.name);
+									var users = JSON.parse(localStorage.getItem('$users') || '[]');
+									var userInfo = {
+										stunum: loginInfo.stunum,
+										passwd: loginInfo.passwd,
+										name: info.name,
+										dept: info.dept
+									};
+									users.push(userInfo);
+									localStorage.setItem('$users', JSON.stringify(users));
+									//关闭等待框
+									plus.nativeUI.closeWaiting();
+									return app.createState(info, callback);
+								},
+								error: function(xhr, type, errorThrown) {
+									//异常处理；
+									console.log(errorThrown);
+									//关闭等待框
+									plus.nativeUI.closeWaiting();
+									return callback("帐号或密码错误");
+								}
+							});
+						}
+					};
+//					var mainPage = $.preload({
+//						"id": 'index',
+//						"url": 'index.html'
+//					});
 					var toMain = function() {
-						$.fire(mainPage, 'show', null);
+//						$.fire(mainPage, 'show', null);
 						setTimeout(function() {
 							$.openWindow({
-								id: 'main',
+								id: 'index',
+								url: 'index.html',
 								show: {
 									aniShow: 'pop-in'
 								},
@@ -137,26 +202,31 @@
 							});
 						}, 0);
 					};
+					// close splash
+					setTimeout(function() {
+						//关闭 splash
+						plus.navigator.closeSplashscreen();
+					}, 600);
 					var loginButton = doc.getElementById('login');
 					loginButton.addEventListener('tap', function(event) {
-						mui.ajax('http://172.50.181.49/TongXiangTicketService/txy/action/login.php', {
-							data: {
-								stunum: mui('#stunum')[0].value,
-								passwd: mui('#passwd')[0].value
-							},
-							dataType: 'json', //服务器返回json格式数据
-							type: 'post', //HTTP请求类型
-							timeout: 10000, //超时时间设置为10秒；
-							success: function(data) {
-								//服务器返回响应，根据响应结果，分析是否登录成功；
-								console.log(data);
-							},
-							error: function(xhr, type, errorThrown) {
-								//异常处理；
-								console.log(type);
+						plus.nativeUI.showWaiting("登录中..." );
+						var stunum = mui('#stunum')[0];
+						var passwd = mui('#passwd')[0];
+						var loginInfo = {
+							stunum: stunum.value,
+							passwd: passwd.value
+						};
+						login(loginInfo, function(err) {
+							if (err) {
+								plus.nativeUI.toast(err);
+								return;
 							}
+							toMain();
 						});
 					});
+//					$.enterfocus('#login-form input', function() {
+//						$.trigger(loginButton, 'tap');
+//					});
 				});
 			}(mui, document));
 		</script>
