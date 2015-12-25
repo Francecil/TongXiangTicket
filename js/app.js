@@ -2,6 +2,7 @@
 
 	owner.createState = function(info, callback) {
 		var state = owner.getState();
+		state.stunum = info.stunum;
 		state.name = info.name;
 		state.dept = info.dept;
 		state.token = "token123456789";
@@ -43,7 +44,7 @@
 		return JSON.parse(settingsText);
 	}
 	/**
-	 * 设置应用本地配置
+	 * 判断是否登录
 	 **/
 	owner.has_login = function() {
 		var state=owner.getState();

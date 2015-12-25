@@ -120,7 +120,6 @@
 					statusBarBackground: '#f7f7f7'
 				});
 				$.plusReady(function() {
-					plus.screen.lockOrientation("portrait-primary");
 					/**
 					 * 用户登录
 					 * ||{}可防止传来数据为null
@@ -139,12 +138,25 @@
 						}
 						//先去本地遍历是否有存在
 						var users = JSON.parse(localStorage.getItem('$users') || '[]');
-						var authed = users.some(function(user) {
-							return loginInfo.stunum == user.stunum && loginInfo.passwd == user.passwd;
-						});
+						//JavaScript数组some()方法测试数组中的某个元素是否通过由提供的功能来实现测试。
+						//由于我们的返回值应该是 user 故不用此法
+//						var authed = users.some(function(user) {
+//							if(loginInfo.stunum == user.stunum && loginInfo.passwd == user.passwd){
+//								return user;
+//							}
+//						});
+						var keepUser = function(users){
+							for(var i=0;i<users.length;i++){
+							if(loginInfo.stunum == users[i].stunum && loginInfo.passwd == users[i].passwd){
+								return users[i];
+							}
+						}
+							return null;
+						}
+						var authed = keepUser(users);
 						if (authed) {
 							console.log("存在 直接login");
-							return app.createState(loginInfo.stunum, callback);
+							return app.createState(authed, callback);
 						} else {
 							console.log("不存在 需要远程验证");
 							//如果没有的话再去服务器查询 有效解决教务处密码更换问题
@@ -171,7 +183,7 @@
 									localStorage.setItem('$users', JSON.stringify(users));
 									//关闭等待框
 									plus.nativeUI.closeWaiting();
-									return app.createState(info, callback);
+									return app.createState(userInfo, callback);
 								},
 								error: function(xhr, type, errorThrown) {
 									//异常处理；
@@ -183,12 +195,15 @@
 							});
 						}
 					};
+					//从main入口进去的 so不需要预加载
 //					var mainPage = $.preload({
 //						"id": 'index',
 //						"url": 'index.html'
 //					});
 					var toMain = function() {
+						//预加载,不执行mainPage的show 如果不加这句话 会直接跳转到mainPage
 //						$.fire(mainPage, 'show', null);
+						console.log("to main");
 						setTimeout(function() {
 							$.openWindow({
 								id: 'index',
@@ -196,17 +211,13 @@
 								show: {
 									aniShow: 'pop-in'
 								},
+								createNew:true,
 								waiting: {
 									autoShow: false
 								}
 							});
 						}, 0);
 					};
-					// close splash
-					setTimeout(function() {
-						//关闭 splash
-						plus.navigator.closeSplashscreen();
-					}, 600);
 					var loginButton = doc.getElementById('login');
 					loginButton.addEventListener('tap', function(event) {
 						plus.nativeUI.showWaiting("登录中..." );
@@ -221,12 +232,14 @@
 								plus.nativeUI.toast(err);
 								return;
 							}
+							/*
+							 * 不能加这句 会打开两个 关闭不掉
+							 */
+//							plus.nativeUI.showWaiting("登录成功..." );
 							toMain();
 						});
 					});
-//					$.enterfocus('#login-form input', function() {
-//						$.trigger(loginButton, 'tap');
-//					});
+					
 				});
 			}(mui, document));
 		</script>

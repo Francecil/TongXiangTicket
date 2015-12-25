@@ -97,6 +97,11 @@
 						</ul>
 						<ul>
 							<p id="layout" style="width:70%;margin-top:60px">
+								<!--
+                                	作者：396324491@qq.com
+                                	时间：2015-12-25
+                                	描述：不给button加display属性 因为可能js执行的比css早
+                                -->
 								<button id="layout-btn" type="button" class="mui-btn mui-btn-danger mui-btn-block" style="padding: 5px 20px;">注销</button>
 							</p>
 						</ul>
@@ -181,11 +186,36 @@
 		<script src="js/app.js"></script>
 		<script>
 			(function($, doc) {
+				
 				mui.init();
+				//判断登录 未登录的话获得{}
+					var showIsLogin = function() {
+						console.log("showIsLogin");
+							var state = app.getState();
+							var layout = mui('#layout')[0];
+							if (app.has_login()) {
+								var usernameText = mui('#name-or-unlogin')[0];
+								usernameText.innerHTML = state.name;
+								var deptText = mui('#dept-or-btn')[0];
+								deptText.innerHTML = state.dept;
+								layout.style.display = "block";
+							} else {
+								var usernameText = mui('#name-or-unlogin')[0];
+								usernameText.innerHTML = '未登录';
+								var deptText = mui('#dept-or-btn')[0];
+								deptText.innerHTML ="<button id='login-btn-pre' type='button'>登录</button>";
+								layout.style.display = "none";
+							}
+						}
+				//显示后才执行的函数,用来更新值
+				window.addEventListener('show', function() {
+					console.log("开始更新页面数据");
+					showIsLogin();
+				}, false);
 				$.plusReady(function() {
 					//关闭等待框
 					plus.nativeUI.closeWaiting();
-					//显示当前页面
+					//显示当前页面 回调show函数
 					mui.currentWebview.show();
 					//侧滑容器父节点
 					var offCanvasWrapper = mui('#offCanvasWrapper');
@@ -247,20 +277,6 @@
 							}
 						}
 					};
-					//判断登录 未登录的话获得{}
-					var showIsLogin = function() {
-							var state = app.getState();
-							var layout = mui('#layout')[0];
-							if (app.has_login()) {
-								var usernameText = mui('#name-or-unlogin')[0];
-								usernameText.innerHTML = state.name;
-								var deptText = mui('#dept-or-btn')[0];
-								deptText.innerHTML = state.dept;
-								layout.style.display = "block";
-							} else {
-								layout.style.display = "none";
-							}
-						}
 						//主列表点击事件
 					mui('.mui-scroll').on('tap', 'a', function() {
 						var id = this.getAttribute('href');
@@ -297,6 +313,7 @@
 							styles: {
 								popGesture: 'close'
 							},
+							createNew:true,
 							waiting: {
 								autoShow: true
 							}
@@ -314,6 +331,7 @@
 					slider.slider({
 						interval: 3000
 					});
+					console.log("main pre end")
 					showIsLogin();
 				});
 			}(mui, document));
