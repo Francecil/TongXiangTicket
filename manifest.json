@@ -249,16 +249,20 @@
 					"js/city.data.js",
 					"js/city.data-3.js",
 					"js/mui.js",
-					"js/zepto.min.js"
+					"js/zepto.min.js",
+					"js/app.js"
 				],
-				"refer": [],
+				"refer": [
+					"page/tab-my_pay.html"
+				],
 				"priority": 0
 			},
 			"page/tab-my_tickets.html": {
 				"resources": [
 					"js/mui.min.js",
 					"css/mui.min.css",
-					"fonts/mui.ttf"
+					"fonts/mui.ttf",
+					"js/app.js"
 				],
 				"refer": [],
 				"priority": 0
@@ -281,6 +285,17 @@
 				],
 				"refer": [
 					"index.html"
+				],
+				"priority": 0
+			},
+			"page/tab-my_pay.html": {
+				"resources": [
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"page/tab-my_tickets.html"
 				],
 				"priority": 0
 			}

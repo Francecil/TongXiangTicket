@@ -54,6 +54,7 @@
 		</style>
 	</body>
 	<script src="../js/mui.min.js"></script>
+	<script src="../js/app.js"></script>
 	<!--
         	作者：396324491@qq.com
         	时间：2015-12-23
@@ -61,6 +62,7 @@
         -->
 	<script>
 		mui.init();
+
 		function getTicketInfo() {
 			//从服务器获取数据
 			//				....
@@ -70,7 +72,7 @@
 			mui.ajax(url, {
 				dataType: 'json', //服务器返回json格式数据
 				type: 'get', //HTTP请求类型
-				timeout: 3000, //超时时间设置为10秒；
+				timeout: 10000, //超时时间设置为10秒；
 				success: function(info) {
 					console.log(info.toString());
 					var ticketList = mui(".ticket-list")[0];
@@ -80,6 +82,7 @@
 						mui.toast("暂无可购买的车票");
 					} else {
 						console.log(info.length);
+						var state = app.getState();
 						mui.each(info, function(index, item) {
 							//							var ticketRdemo=ticketDemo.clone;
 							ticketListInString += "\
@@ -87,23 +90,27 @@
 					<form class=\"mui-input-group\">\
 						<div class=\"mui-input-row\">\
 							<label>姓名</label>\
-							<input type=\"text\" class=\"mui-input-clear\" placeholder=\"请输入您的名字\">\
+							<input type=\"text\" class=\"mui-input-clear ticket-name\" value='" + state.name + "' placeholder=\"请输入您的名字\">\
 						</div>\
 						<div class=\"mui-input-row\">\
 							<label>电话</label>\
-							<input type=\"text\" class=\"mui-input-clear\" placeholder=\"请输入您的联系方式\">\
+							<input type=\"text\" class=\"mui-input-clear ticket-tel\" placeholder=\"请输入您的联系方式\">\
+						</div>\
+						<div class=\"mui-input-row\">\
+							<label>票价</label>\
+							<input type=\"text\" class=\"mui-input-clear ticket-price\" disabled=\"disabled\" value='" + item.price + "'>\
 						</div>\
 						<div class=\"mui-input-row\">\
 							<label>出发地</label>\
-							<input type=\"text\" class=\"mui-input-clear\" disabled=\"disabled\" value='"+item.departure+"' placeholder=\"请输入您的出发地\">\
+							<input type=\"text\" class=\"mui-input-clear  ticket-departure\" disabled=\"disabled\" value='" + item.departure + "' placeholder=\"请输入您的出发地\">\
 						</div>\
 						<div class=\"mui-input-row\">\
 							<label>目的地</label>\
-							<input type=\"text\" class=\"mui-input-clear\" disabled=\"disabled\" value='"+item.destination+"' placeholder=\"请输入您的目的地\">\
+							<input type=\"text\" class=\"mui-input-clear  ticket-destination\" disabled=\"disabled\" value='" + item.destination + "' placeholder=\"请输入您的目的地\">\
 						</div>\
 						<div class=\"mui-input-row\">\
 							<label>\出行时间</label>\
-							<input type=\"text\" class=\"mui-input-clear\" disabled=\"disabled\" value='"+item.time+"' placeholder=\"请输入您的出行时间\">\
+							<input type=\"text\" class=\"mui-input-clear ticket-time\" disabled=\"disabled\" value='" + item.time + "' placeholder=\"请输入您的出行时间\">\
 						</div>\
 						<div class=\"mui-input-row\">\
 							<label>\票数</label>\
@@ -114,7 +121,7 @@
 							</div>\
 						</div>\
 						<div class=\"mui-button-row\">\
-							<input type=\"hidden\" value='"+item.tno+"'/>\
+							<input name='tno' type=\"hidden\" value='" + item.tno + "'/>\
 							<button id=\"ticketBtn\" class=\"mui-btn mui-btn-primary ticketBtn\" type=\"button\">\购买</button>\
 						</div>\
 					</form>\
@@ -149,9 +156,80 @@
 				console.log("mui.ready(function()");
 			});
 		}
-		mui(".mui-card").on('tap', '.ticketBtn', function() {
-			mui.toast(this.value);
-					});
+		mui('.ticket-list').on('tap', '#ticketBtn', function() {
+			var this_gparent = this.parentNode.parentNode;
+			var state = app.getState();
+			plus.nativeUI.showWaiting('正在处理...');
+			var ticketInfo = {
+				stunum: state.stunum,
+				name:this_gparent.querySelector('.ticket-name').value,
+				tno: this_gparent.querySelector('input[name="tno"]').value,
+				tel: this_gparent.querySelector('.ticket-tel').value,
+				price:this_gparent.querySelector('.ticket-price').value,
+				time:this_gparent.querySelector('.ticket-time').value,
+				departure:this_gparent.querySelector('.ticket-departure').value,
+				destination:this_gparent.querySelector('.ticket-destination').value,
+				amount: this_gparent.querySelector('#ticketNumber').value
+			};
+			bookTicket(ticketInfo, function(err) {
+				plus.nativeUI.closeWaiting();
+				if (err) {
+					plus.nativeUI.toast(err);
+					return;
+				}
+				toPayfor(ticketInfo);
+			});
+		});
+		var bookTicket = function(ticketInfo, callback) {
+			callback = callback || $.noop;
+			ticketInfo = ticketInfo || {};
+			ticketInfo.tel = ticketInfo.tel || '';
+			if (ticketInfo.tel.length != 11) {
+				return callback('电话号码为11个字符');
+			}
+			var url = "http://txy.azurewebsites.net/action/bookTickets.php";
+			mui.ajax(url, {
+				data: {
+					stunum: ticketInfo.stunum,
+					tno: ticketInfo.tno,
+					tel: ticketInfo.tel,
+					amount: ticketInfo.amount
+				},
+				dataType: 'json', //服务器返回json格式数据
+				type: 'post', //HTTP请求类型
+				timeout: 10000, //超时时间设置为10秒；
+				success: function(info) {
+					//服务器返回响应，根据响应结果，分析是否登录成功，并把数据存入本地users列表
+					console.log(info.status);
+					//关闭等待框
+					return callback();
+				},
+				error: function(xhr, type, errorThrown) {
+					//异常处理；
+					console.log(errorThrown);
+					//关闭等待框
+					return callback("订票失败");
+				}
+			});
+		};
+		var toPayfor = function(ticketInfo) {
+			setTimeout(function() {
+				mui.openWindow({
+					id: 'tab-my_pay',
+					url: 'tab-my_pay.html',
+					show: {
+						aniShow: 'pop-in'
+					},
+					extras: {
+					//自定义扩展参数，可以用来处理页面间传值
+						ticketInfo:ticketInfo
+					},
+					waiting: {
+						autoShow: false
+					}
+				});
+			}, 0);
+		};
 	</script>
 
 </html>

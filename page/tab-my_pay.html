@@ -10,52 +10,47 @@
 
 		<link rel="stylesheet" href="../css/mui.min.css">
 		<style>
-			html,body {
+			html,
+			body {
 				background-color: #efeff4;
 			}
-			.title{
+			
+			.title {
 				margin: 20px 15px 10px;
 				color: #6d6d72;
 				font-size: 15px;
 			}
-		    .mui-table h4,.mui-table h5,.mui-table .mui-h5,.mui-table .mui-h6,.mui-table p{
-		        margin-top: 0;
-		    }
-		    .mui-table h4{
-		        line-height: 21px;
-		        font-weight: 500;
-		    }
-		 .mui-table .oa-icon{
-		        position: absolute;
-		        right:0;
-		        bottom: 0;
-		    }
-		    .mui-table .oa-icon-star-filled{
-		        color:#f14e41;
-		    }
-		   
 			
+			.mui-table .oa-icon {
+				position: absolute;
+				right: 0;
+				bottom: 0;
+			}
+			
+			.mui-table .oa-icon-star-filled {
+				color: #f14e41;
+			}
 		</style>
 	</head>
-	
+
 	<body>
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 			<h1 class="mui-title">确认订单</h1>
 		</header>
 		<div class="mui-content">
-			
-        <ul class="mui-table-view">
-				
+
+			<ul class="mui-table-view">
+
 				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right" >
-					 <p1 style="color: black;">郑家兴   13888888888 </p1>
-					 <p >福州大学学生生活区29号楼112</p>	
+					<a class="mui-navigate-right">
+						<p1 class="ticket-name-tel_1" style="color: black;">xxx xxxxxxxxxx</p1>
+						<p>福州大学学生生活区29号楼112</p>
 					</a>
 				</li>
-		</ul>		
-		
-        <ul class="mui-table-view mui-table-view-radio" style="margin-top: 20px;">
+			</ul>
+
+			<ul class="mui-table-view mui-table-view-radio" style="margin-top: 20px;">
 				<li class="mui-table-view-cell">
 					<a class="mui-navigate-right">
 						在线支付
@@ -66,38 +61,78 @@
 						货到付款
 					</a>
 				</li>
+			</ul>
+			<!--获取待付款订单对应的信息-->
+			<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed" style="margin-top:20px;">
+				<li class="mui-table-view-cell">
+					<div class="mui-table-cell mui-col-xs-10">
+						<h5 class="ticket-time-dep-des"><div class="ticket-time">xxxx-xx-xx xx:xx:xx</div>开 <div class="ticket-dep-des">xxx-xxx</div></h5>
+						<h5><div class="ticket-name-tel_2">xxx  xxxxxxxxxx</div></h5>
+						<h5><div class="ticket-priceAll_2">130.00元</div></h5>
+					</div>
+					<div class="mui-table-cell mui-col-xs-2 mui-text-right">
+						<span class="mui-h4 ticket-priceAll" style="margin-left: 15px;">￥65</span>
+					</div>
+		</div>
+		</li>
 		</ul>
-        <!--获取待付款订单对应的信息-->
-         <ul class="mui-table-view mui-table-view-striped mui-table-view-condensed" style="margin-top:20px;">
-		        <li class="mui-table-view-cell">
-		            <div class="mui-table-cell mui-col-xs-10">
-		            	<h4 class=" mui-h6 mui-ellipsis">2015-2-1 19:05开 G6025 北京-晋江</h4>
-		            	<h5>旅客信息:郑家兴  二代身份证</h5><h5>票款金额:成人票 500.2元</h5>
-		            	<h5>席位信息:09车厢 16A号 一等座</h5>
-		            </div>
-		            <div class="mui-table-cell mui-col-xs-2 mui-text-right">
-		            <span class="mui-h4" style="margin-left: 15px;">$24</span>
-		            </div>
-		            </div>
-		        </li>   
-		         
-		         
-		    </ul>
-		<button  class="mui-btn mui-btn-success mui-btn-block">结算</button>
-  
-    </div>
-	 
+		<div class="sa_btn">
+			<button id="settle_account" class="mui-btn mui-btn-success mui-btn-block">结算</button>
+		</div>
+
+		</div>
+
 	</body>
 	<script src="../js/mui.min.js"></script>
 	<script>
 		mui.init({
-			swipeBack:true //启用右滑关闭功能
+			swipeBack: true //启用右滑关闭功能
 		});
-		document.getElementById("about").addEventListener('tap',function () {
-			//获得主页面的webview
-			var main = plus.webview.currentWebview().parent();
-			//触发主页面的gohome事件
-			mui.fire(main,'gohome');
+		mui.plusReady(function() {
+			plus.nativeUI.closeWaiting();
+			//显示当前页面
+			mui.currentWebview.show();
+			//可以得到值
+			var ticketInfo = mui.currentWebview.ticketInfo;
+			console.log("接受传值：" + ticketInfo.stunum);
+			var ticket_name_tel_1 = mui('.ticket-name-tel_1')[0];
+			ticket_name_tel_1.innerHTML = ticketInfo.name + " " + ticketInfo.tel;
+			var ticket_name_tel_2 = mui('.ticket-name-tel_2')[0];
+			ticket_name_tel_2.innerHTML = "乘客信息:" + ticketInfo.name + " " + ticketInfo.tel;
+			var ticket_time_dep_des = mui('.ticket-time-dep-des')[0];
+			ticket_time_dep_des.innerHTML = ticketInfo.time + "开   " + ticketInfo.departure + "->" + ticketInfo.destination;
+			var ticket_priceAll = mui('.ticket-priceAll')[0];
+			ticket_priceAll.innerHTML = "￥" + ticketInfo.amount * ticketInfo.price;
+			var ticket_priceAll_2 = mui('.ticket-priceAll_2')[0];
+			ticket_priceAll_2.innerHTML = "票款金额:" + ticketInfo.amount * ticketInfo.price + "元";
 		});
+		/*
+		 * button 上套个div('sa_btn') 而用mui-content识别不了
+		 */
+		mui('.sa_btn').on('tap', '#settle_account', function() {
+			console.log("选择结算方式:");
+			toMyTickets();
+		});
+		// 关闭自身窗口
+		function closeme() {
+			var ws = plus.webview.currentWebview();
+			plus.webview.close(ws);
+		}
+		var toMyTickets = function() {
+			setTimeout(function() {
+				mui.openWindow({
+					id: 'tab-my_tickets',
+					url: 'tab-my_tickets.html',
+					show: {
+						aniShow: 'pop-in'
+					},
+					waiting: {
+						autoShow: false
+					}
+				});
+				closeme();
+			}, 0);
+		};
 	</script>
+
 </html>

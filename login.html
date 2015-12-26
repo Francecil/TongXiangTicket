@@ -182,14 +182,12 @@
 									users.push(userInfo);
 									localStorage.setItem('$users', JSON.stringify(users));
 									//关闭等待框
-									plus.nativeUI.closeWaiting();
 									return app.createState(userInfo, callback);
 								},
 								error: function(xhr, type, errorThrown) {
 									//异常处理；
 									console.log(errorThrown);
 									//关闭等待框
-									plus.nativeUI.closeWaiting();
 									return callback("帐号或密码错误");
 								}
 							});
@@ -228,6 +226,7 @@
 							passwd: passwd.value
 						};
 						login(loginInfo, function(err) {
+							plus.nativeUI.closeWaiting();
 							if (err) {
 								plus.nativeUI.toast(err);
 								return;

@@ -54,7 +54,7 @@
 		</header>
 		<div class="mui-content">
 			<div id="slider" class="mui-slider">
-				<div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control ">
+				<div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control">
 					<a class="mui-control-item" href="#item1mobile">
 				已完成订单
 			</a>
@@ -193,16 +193,6 @@
 						}
 					} 
 				});
-				var sliderSegmentedControl = document.getElementById('sliderSegmentedControl');
-				$('.mui-input-group').on('change', 'input', function() {
-					if (this.checked) {
-						sliderSegmentedControl.className = 'mui-slider-indicator mui-segmented-control mui-segmented-control-inverted mui-segmented-control-' + this.value;
-						//force repaint
-						sliderProgressBar.setAttribute('style', sliderProgressBar.getAttribute('style'));
-					}
-				});
 			})(mui);
-		
-		
 	</script>
 </html>

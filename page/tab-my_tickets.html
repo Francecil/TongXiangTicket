@@ -47,110 +47,91 @@
 			<h1 class="mui-title">我的车票</h1>
 		</header>
 		<div class="mui-content">
-			<div class="title" style="margin-bottom: 15px;">
-				<h6>订单号: E12391293 订单时间: 2015-12-1 总张数:1</h6>
-			</div>
-			<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed">
-					<li class="mui-table-view-cell">
-					<div class="mui-table">
-		                <div class="mui-table-cell mui-col-xs-10">
-		                    <h4 class=" mui-h6 mui-ellipsis">2015-10-1 福大生活三区-晋江SM 8:05开</h4>
-		                    <h5>座位信息:车牌A8888  位置06号</h5>
-		                    <h5>姓名:郑家兴  年级:2013</h5>
-		                    <h5>学院:数学与计算机科学学院</h5>
-		                    <h5>车票状态:已支付</h5>
-		                </div>
-		                <div class="mui-table-cell mui-col-xs-2 mui-text-right">
-		                  <!--这里是退票改签按钮-->
-		                  <button type="button" class="mui-btn mui-btn-primary mui-btn-outlined">改签</button>
-				            <button type="button" class="mui-btn mui-btn-danger mui-btn-outlined">退票</button>
-		                </div>
-		            </div>
-		        </li>
-		        
-			</ul>
-			
-			<div class="title" style="margin-bottom: 15px;">
-				<h6>订单号: E12391293 订单时间: 2015-10-1 总张数:2</h6>
-			</div>
-			<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed">
-					<li class="mui-table-view-cell">
-					<div class="mui-table">
-		                <div class="mui-table-cell mui-col-xs-10">
-		                     <h4 class=" mui-h6 mui-ellipsis">2015-10-7 晋江SM-福大生活三区 14:05开</h4>
-		                    <h5>座位信息:车牌A66666  位置06号</h5>
-		                    <h5>姓名:郑家兴  年级:2013</h5>
-		                    <h5>学院:数学与计算机科学学院</h5>
-		                    <h5>车票状态:已支付</h5>
-		                </div>
-		                <div class="mui-table-cell mui-col-xs-2 mui-text-right">
-		                    <button type="button" class="mui-btn mui-btn-primary mui-btn-outlined">改签</button>
-				            <button type="button" class="mui-btn mui-btn-danger mui-btn-outlined">退票</button>
-		                </div>
-		            </div>
-		        </li>
-		        <li class="mui-table-view-cell">
-		            <div class="mui-table">
-		                <div class="mui-table-cell mui-col-xs-10">
-		                    <h4 class=" mui-h6 mui-ellipsis">2015-10-7 晋江SM-福大生活三区 14:05开</h4>
-		                    <h5>座位信息:车牌A6666  位置07号</h5>
-		                    <h5>姓名:吴泽钦  年级:2013</h5>
-		                    <h5>学院:数学与计算机科学学院</h5>
-		                    <h5>车票状态:已支付</h5>
-		                </div>
-		                <div class="mui-table-cell mui-col-xs-2 mui-text-right">
-		                  <button type="button" class="mui-btn mui-btn-primary mui-btn-outlined">改签</button>
-				            <button type="button" class="mui-btn mui-btn-danger mui-btn-outlined">退票</button>
-		                </div>
-		            </div>
-		        </li>
-			<li class="mui-table-view-cell">
-		            <div class="mui-table">
-		                <div class="mui-table-cell mui-col-xs-10">
-		                    <h4 class=" mui-h6 mui-ellipsis">2015-10-7 晋江SM-福大生活三区 14:05开</h4>
-		                    <h5>座位信息:车牌A6666  位置07号</h5>
-		                    <h5>姓名:吴泽钦  年级:2013</h5>
-		                    <h5>学院:数学与计算机科学学院</h5>
-		                    <h5>车票状态:已支付</h5>
-		                </div>
-		                <div class="mui-table-cell mui-col-xs-2 mui-text-right">
-		                  <button type="button" class="mui-btn mui-btn-primary mui-btn-outlined">改签</button>
-				            <button type="button" class="mui-btn mui-btn-danger mui-btn-outlined">退票</button>
-		                </div>
-		            </div>
-		        </li><li class="mui-table-view-cell">
-		            <div class="mui-table">
-		                <div class="mui-table-cell mui-col-xs-10">
-		                    <h4 class=" mui-h6 mui-ellipsis">2015-10-7 晋江SM-福大生活三区 14:05开</h4>
-		                    <h5>座位信息:车牌A6666  位置07号</h5>
-		                    <h5>姓名:吴泽钦  年级:2013</h5>
-		                    <h5>学院:数学与计算机科学学院</h5>
-		                    <h5>车票状态:已支付</h5>
-		                </div>
-		                <div class="mui-table-cell mui-col-xs-2 mui-text-right">
-		                  <button type="button" class="mui-btn mui-btn-primary mui-btn-outlined">改签</button>
-				            <button type="button" class="mui-btn mui-btn-danger mui-btn-outlined">退票</button>
-		                </div>
-		            </div>
-		        </li>
-		        
-			</ul>
-			
-		
-			
-			
 			
 		</div>
 		</style>
 	</body>
 	<script src="../js/mui.min.js"></script>
+	<script src="../js/app.js"></script>
 	<script>
+		mui.init();
+		function getMyTickets() {
+			//从服务器获取数据
+			//				....
+			//业务数据获取完毕，并已插入当前页面DOM；
+			//注意：若为ajax请求，则需将如下代码放在处理完ajax响应数据之后；
+			var url = "http://txy.azurewebsites.net/action/getBookedTickets.php";
+			var state=app.getState();
+			mui.ajax(url, {
+				data: {
+					stunum: state.stunum
+				},
+				dataType: 'json', //服务器返回json格式数据
+				type: 'get', //HTTP请求类型
+				timeout: 10000, //超时时间设置为10秒；
+				success: function(info) {
+					console.log(info.toString());
+					var ticketList = mui(".mui-content")[0];
+					var ticketListInString = '';
+					if (info.length == 0) {
+						mui.toast("暂无车票信息");
+					} else {
+						console.log(info.length);
+						mui.each(info, function(index, item) {
+							ticketListInString += 
+				" <div class='title' style='margin-bottom: 15px;'>"
+				+"<h6>"
+				+"	订单号: E12391293 订单时间: 2015-12-1"
+				+"</h6>"
+			+"</div>"
+			+"<ul class='mui-table-view mui-table-view-striped mui-table-view-condensed'>"
+			+"		<li class='mui-table-view-cell'>"
+			+"		<div class='mui-table'>"
+		    +"            <div class='mui-table-cell mui-col-xs-10'>"
+		    +"                <h4 class=' mui-h6 mui-ellipsis'>"
+		    +"                	2015-10-1 福大生活三区-晋江SM 8:05开"
+		    +"                </h4>"
+		    +"                <h5>"
+		    +"                	座位信息:车牌A8888  位置06号"
+		    +"                </h5>"
+		    +"                <h5>"
+		    +"                	姓名:郑家兴  年级:2013"
+		    +"                </h5>"
+		    +"                <h5>"
+		    +"                	学院:数学与计算机科学学院"
+		    +"                </h5>"
+		    +"                <h5>"
+		    +"                	车票状态:已支付"
+		    +"                </h5>"
+		    +"            </div>"
+		    +"            <div class='mui-table-cell mui-col-xs-2 mui-text-right'>"
+		    +"              <!--这里是退票改签按钮-->"
+			+"	            <button type='button' class='mui-btn mui-btn-danger mui-btn-outlined'>"
+			+"	            	退票"
+			+"	            </button>"
+		    +"            </div>"
+		    +"        </div>"
+		    +"    </li>"
+			+"</ul>";
+							console.log(item.departure + index);
+						});
+						ticketList.innerHTML = ticketListInString;
+					}
+					console.log("获取数据成功");
+				},
+				error: function(xhr, type, errorThrown) {
+					console.log(errorThrown);
+					mui.toast("数据获取失败,请检查网络");
+				}
+			});
+		}
 		window.onload = function() {
 			//从服务器获取数据
 			//				....
 			//业务数据获取完毕，并已插入当前页面DOM；
 			//注意：若为ajax请求，则需将如下代码放在处理完ajax响应数据之后；
 			mui.plusReady(function() {
+				getMyTickets();
 				//关闭等待框
 				plus.nativeUI.closeWaiting();
 				//显示当前页面
@@ -161,12 +142,6 @@
 	<script>
 		mui.init({
 			swipeBack:true //启用右滑关闭功能
-		});
-		document.getElementById("about").addEventListener('tap',function () {
-			//获得主页面的webview
-			var main = plus.webview.currentWebview().parent();
-			//触发主页面的gohome事件
-			mui.fire(main,'gohome');
 		});
 	</script>
 </html>
