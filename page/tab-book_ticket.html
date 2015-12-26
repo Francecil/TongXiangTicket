@@ -57,9 +57,8 @@
 	<!--
         	作者：396324491@qq.com
         	时间：2015-12-23
-        	描述：注意 加上../js/mui.js后,numbox的一次点击会执行两次,两个js因为部分方法重复
+        	描述：注意 加上../js/mui.js or zepto.js后,numbox的一次点击会执行两次,两个js因为部分方法重复
         -->
-	<script src="../js/zepto.min.js"></script>
 	<script>
 		mui.init();
 		function getTicketInfo() {
@@ -74,7 +73,7 @@
 				timeout: 3000, //超时时间设置为10秒；
 				success: function(info) {
 					console.log(info.toString());
-					var ticketList = $(".ticket-list")[0];
+					var ticketList = mui(".ticket-list")[0];
 					var ticketListInString = '';
 					if (info.length == 0) {
 						ticketList.style.display = "none";
@@ -96,15 +95,15 @@
 						</div>\
 						<div class=\"mui-input-row\">\
 							<label>出发地</label>\
-							<input type=\"text\" class=\"mui-input-clear\" placeholder=\"请输入您的出发地\">\
+							<input type=\"text\" class=\"mui-input-clear\" disabled=\"disabled\" value='"+item.departure+"' placeholder=\"请输入您的出发地\">\
 						</div>\
 						<div class=\"mui-input-row\">\
 							<label>目的地</label>\
-							<input type=\"text\" class=\"mui-input-clear\" placeholder=\"请输入您的目的地\">\
+							<input type=\"text\" class=\"mui-input-clear\" disabled=\"disabled\" value='"+item.destination+"' placeholder=\"请输入您的目的地\">\
 						</div>\
 						<div class=\"mui-input-row\">\
 							<label>\出行时间</label>\
-							<input type=\"text\" class=\"mui-input-clear\" placeholder=\"请输入您的出行时间\">\
+							<input type=\"text\" class=\"mui-input-clear\" disabled=\"disabled\" value='"+item.time+"' placeholder=\"请输入您的出行时间\">\
 						</div>\
 						<div class=\"mui-input-row\">\
 							<label>\票数</label>\
@@ -115,7 +114,8 @@
 							</div>\
 						</div>\
 						<div class=\"mui-button-row\">\
-							<button id=\"ticketBtn\" class=\"mui-btn mui-btn-primary\" type=\"button\">\购买</button>\
+							<input type=\"hidden\" value='"+item.tno+"'/>\
+							<button id=\"ticketBtn\" class=\"mui-btn mui-btn-primary ticketBtn\" type=\"button\">\购买</button>\
 						</div>\
 					</form>\
 				</div>\
@@ -149,6 +149,9 @@
 				console.log("mui.ready(function()");
 			});
 		}
+		mui(".mui-card").on('tap', '.ticketBtn', function() {
+			mui.toast(this.value);
+					});
 	</script>
 
 </html>
