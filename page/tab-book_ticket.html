@@ -48,7 +48,6 @@
             	描述：mui-card用于展示块状表单 样式美观 曲边框
             -->
 			<div class="ticket-list">
-
 			</div>
 
 		</div>
@@ -63,31 +62,31 @@
 	<!--<script src="../js/mui.js"></script>-->
 	<script src="../js/mui.picker.js"></script>
 	<script src="../js/mui.poppicker.js"></script>
+	<script src="../js/zepto.min.js"></script>
 	<script>
-		(function($, doc) {
-			$.init();
-			window.onload = function() {
-				//从服务器获取数据
-				//				....
-				//业务数据获取完毕，并已插入当前页面DOM；
-				//注意：若为ajax请求，则需将如下代码放在处理完ajax响应数据之后；
-				var url = "http://txy.azurewebsites.net/action/availableTickets.php";
-				mui.ajax(url, {
-					dataType: 'json', //服务器返回json格式数据
-					type: 'get', //HTTP请求类型
-					timeout: 10000, //超时时间设置为10秒；
-					success: function(info) {
-						console.log(info.toString());
-						var ticketList = $("#ticket-list");
-						if (info.length == 0) {
-							ticketList.style.display = "none";
-							mui.toast("暂无可购买的车票");
-						} else {
-							console.log(info.length);
-							var ticketListInString = '';
-							mui.each(info, function(index, item) {
-								//							var ticketRdemo=ticketDemo.clone;
-								ticketListInString += "\
+		mui.init();
+		function getTicketInfo() {
+			//从服务器获取数据
+			//				....
+			//业务数据获取完毕，并已插入当前页面DOM；
+			//注意：若为ajax请求，则需将如下代码放在处理完ajax响应数据之后；
+			var url = "http://txy.azurewebsites.net/action/availableTickets.php";
+			mui.ajax(url, {
+				dataType: 'json', //服务器返回json格式数据
+				type: 'get', //HTTP请求类型
+				timeout: 3000, //超时时间设置为10秒；
+				success: function(info) {
+					console.log(info.toString());
+					var ticketList = $(".ticket-list")[0];
+					var ticketListInString = '';
+					if (info.length == 0) {
+						ticketList.style.display = "none";
+						mui.toast("暂无可购买的车票");
+					} else {
+						console.log(info.length);
+						mui.each(info, function(index, item) {
+							//							var ticketRdemo=ticketDemo.clone;
+							ticketListInString += "\
 							<div class=\"mui-card\">\
 					<form class=\"mui-input-group\">\
 						<div class=\"mui-input-row\">\
@@ -124,40 +123,33 @@
 					</form>\
 				</div>\
 				<p>\</p>\
-				"
-								console.log(item.departure + index);
-							});
-							ticketList.innerHTML=ticketListInString;
-							//ajax获取数据是异步的 需要进行init
-							mui.init();
-//							ticketList.append(ticketListInString);
-							
-						}
-						mui.plusReady(function() {
-							//关闭等待框
-							plus.nativeUI.closeWaiting();
-							//显示当前页面
-							mui.currentWebview.show();
-							var ticketBtn = doc.getElementById("ticketBtn");
-//							var ticketNumber = mui('#ticketNumber')[0];
-//							ticketBtn.addEventListener('tap', function(event) {
-//								mui.toast(ticketNumber.value);
-//							});
+				";
+							console.log(item.departure + index);
 						});
-					},
-					error: function(xhr, type, errorThrown) {
-						console.log(errorThrown);
-						mui.toast("数据获取失败,请检查网络");
-						mui.plusReady(function() {
-							//关闭等待框
-							plus.nativeUI.closeWaiting();
-							//显示当前页面
-							mui.currentWebview.show();
-						});
+						ticketList.innerHTML = ticketListInString;
 					}
-				});
-			}
-		})(mui, document);
+					console.log("获取数据成功");
+				},
+				error: function(xhr, type, errorThrown) {
+					console.log(errorThrown);
+					mui.toast("数据获取失败,请检查网络");
+				}
+			});
+		}
+		//设置延迟加载
+		if (mui.os.plus) {
+			mui.plusReady(function() {
+				getTicketInfo();
+				plus.nativeUI.closeWaiting();
+				//显示当前页面
+				mui.currentWebview.show();
+			});
+		} else {
+			mui.ready(function() {
+				getTicketInfo();
+				console.log("mui.ready(function()");
+			});
+		}
 	</script>
 
 </html>

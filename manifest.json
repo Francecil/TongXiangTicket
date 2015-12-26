@@ -248,7 +248,8 @@
 					"fonts/mui.ttf",
 					"js/city.data.js",
 					"js/city.data-3.js",
-					"js/mui.js"
+					"js/mui.js",
+					"js/zepto.min.js"
 				],
 				"refer": [],
 				"priority": 0
