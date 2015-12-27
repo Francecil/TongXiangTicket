@@ -104,7 +104,7 @@
 			var ticket_priceAll = mui('.ticket-priceAll')[0];
 			ticket_priceAll.innerHTML = "￥" + ticketInfo.amount * ticketInfo.price;
 			var ticket_priceAll_2 = mui('.ticket-priceAll_2')[0];
-			ticket_priceAll_2.innerHTML = "票款金额:" + ticketInfo.amount * ticketInfo.price + "元";
+			ticket_priceAll_2.innerHTML = "票款金额:" + ticketInfo.amount * ticketInfo.price + "元(共"+ticketInfo.amount+"张)";
 		});
 		/*
 		 * button 上套个div('sa_btn') 而用mui-content识别不了
